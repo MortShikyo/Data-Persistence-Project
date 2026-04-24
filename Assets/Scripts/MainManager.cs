@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,14 +19,16 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
-    // Start is called before the first frame update
+
     void Start()
     {
+        // BEST SCORE DIREKT SETZEN
+        BestScoreText.text = $"Best Score : {PersistanceManager.Instance.TeamName} : {PersistanceManager.Instance.BestScore}";
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
-        int[] pointCountArray = new [] {1,1,2,2,5,5};
+
+        int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
         for (int i = 0; i < LineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
@@ -72,5 +75,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > PersistanceManager.Instance.BestScore)
+        {
+            PersistanceManager.Instance.BestScore = m_Points;
+            PersistanceManager.Instance.SaveData();
+        }
+        BestScoreText.text = $"Best Score : {PersistanceManager.Instance.TeamName} : {PersistanceManager.Instance.BestScore}";
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
