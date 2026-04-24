@@ -13,10 +13,11 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public Text BestScoreText;
     public GameObject GameOverText;
-    
+    public GameObject PauseMenu;
+
     private bool m_Started = false;
     private int m_Points;
-    
+    private bool m_Paused = false;
     private bool m_GameOver = false;
 
 
@@ -63,6 +64,10 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
     }
 
     void AddPoint(int point)
@@ -86,5 +91,21 @@ public class MainManager : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void Pause()
+    {
+        if (!m_Paused)
+        {
+            m_Paused = true;
+            Time.timeScale = 0;
+            PauseMenu.SetActive(true);
+        }
+        else
+        {
+            m_Paused = false;
+            Time.timeScale = 1;
+            PauseMenu.SetActive(false);
+        }
     }
 }
